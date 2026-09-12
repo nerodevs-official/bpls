@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect all requests to the public directory
+    RewriteRule ^(.*)$ public/$1 [L]
+
+</IfModule>
+
+# php -- BEGIN Hostinger/cPanel handler --
+
+# Force PHP 8.3 (change to php82 if your host supports only 8.2)
+
+<IfModule mime_module>
+    AddHandler application/x-httpd-php83 .php .php8 .phtml
+</IfModule>
+
+# php -- END Hostinger/cPanel handler --

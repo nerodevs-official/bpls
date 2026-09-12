@@ -1,0 +1,144 @@
+import React from "react";
+import { useForm, Link, router } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+
+export default function Create({ roles }) {
+    const { data, setData, post, errors } = useForm({
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        roles: [],
+    });
+
+    const handleCheckbox = (roleName) => {
+        setData(
+            "roles",
+            data.roles.includes(roleName)
+                ? data.roles.filter((r) => r !== roleName)
+                : [...data.roles, roleName]
+        );
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route("users.store"));
+    };
+
+    return (
+        <AuthenticatedLayout
+            header={
+                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                    Roles
+                </h2>
+            }
+        >
+            <Head title="Dashboard" />
+
+            <div className="max-w-3xl p-6 mx-auto">
+                <h1 className="mb-4 text-2xl font-bold">Create New User</h1>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block font-medium">Name</label>
+                        <input
+                            type="text"
+                            className="w-full px-3 py-2 border rounded"
+                            value={data.name}
+                            onChange={(e) => setData("name", e.target.value)}
+                        />
+                        {errors.name && (
+                            <p className="text-sm text-red-600">
+                                {errors.name}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block font-medium">Email</label>
+                        <input
+                            type="email"
+                            className="w-full px-3 py-2 border rounded"
+                            value={data.email}
+                            onChange={(e) => setData("email", e.target.value)}
+                        />
+                        {errors.email && (
+                            <p className="text-sm text-red-600">
+                                {errors.email}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block font-medium">Password</label>
+                        <input
+                            type="password"
+                            className="w-full px-3 py-2 border rounded"
+                            value={data.password}
+                            onChange={(e) =>
+                                setData("password", e.target.value)
+                            }
+                        />
+                        {errors.password && (
+                            <p className="text-sm text-red-600">
+                                {errors.password}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label className="block font-medium">
+                            Confirm Password
+                        </label>
+                        <input
+                            type="password"
+                            className="w-full px-3 py-2 border rounded"
+                            value={data.password_confirmation}
+                            onChange={(e) =>
+                                setData("password_confirmation", e.target.value)
+                            }
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block mb-2 font-medium">Roles</label>
+                        <div className="flex flex-wrap gap-3">
+                            {roles.map((role) => (
+                                <label
+                                    key={role.id}
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={data.roles.includes(role.name)}
+                                        onChange={() =>
+                                            handleCheckbox(role.name)
+                                        }
+                                        className="mr-2"
+                                    />
+                                    {role.name}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <Link
+                            href={route("users.index")}
+                            className="text-gray-600 hover:underline"
+                        >
+                            Cancel
+                        </Link>
+                        <button
+                            type="submit"
+                            className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </AuthenticatedLayout>
+    );
+}
